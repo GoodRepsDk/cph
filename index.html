@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoodReps.dk</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ffffff;
+            --secondary: #ffffff;
+            --accent: #ff0000;
+            --text: #000000;
+            --text-secondary: #ff0000;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--secondary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .logo span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: block;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 2rem;
+        }
+        
+        nav ul li a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+        
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(154, 4, 4, 0.7), rgba(43, 37, 37, 0.7)), url('https://www.wowktv.com/wp-content/uploads/sites/52/2022/11/001-Counterfeit-Products.jpg?w=1280');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+        }
+        
+        .btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 77, 77, 0.3);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--accent);
+            margin-left: 1rem;
+        }
+        
+        /* Products Section */
+        .section-title {
+            text-align: center;
+            margin: 4rem 0 2rem;
+            font-size: 2rem;
+        }
+        
+        .categories {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .category-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .category-btn.active {
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        .category-btn:hover {
+            color: var(--text);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .product-card {
+            background-color: var(--secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-price {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .product-btn {
+            background-color: var(--accent);
+            color: rgb(0, 0, 0);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex-grow: 1;
+            margin-right: 0.5rem;
+        }
+        
+        .product-btn:last-child {
+            margin-right: 0;
+        }
+        
+        .product-btn:hover {
+            background-color: #e64444;
+        }
+        
+        .product-btn.secondary {
+            background-color: var(--secondary);
+            border: 1px solid var(--text-secondary);
+        }
+        
+        .product-btn.secondary:hover {
+            background-color: #2a2a2a;
+        }
+        
+        /* Discord Section */
+        .discord-section {
+            background-color: var(--secondary);
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .discord-section h2 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .discord-section p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: var(--text-secondary);
+        }
+        
+        .discord-btn {
+            background-color: #5865F2;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .discord-btn i {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .discord-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(88, 101, 242, 0.3);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--secondary);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .social-links {
+            margin-bottom: 2rem;
+        }
+        
+        .social-links a {
+            color: var(--text);
+            font-size: 1.5rem;
+            margin: 0 0.5rem;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .disclaimer {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal-content {
+            background-color: var(--secondary);
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        /* Buy Now Modal */
+        .buy-now-modal {
+            text-align: center;
+        }
+        
+        .buy-now-modal i {
+            font-size: 3rem;
+            color: #5865F2;
+            margin-bottom: 1rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+            }
+            
+            nav ul li {
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            GoodRepsDK
+            <span>Find dine f*akes billigt i dag</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Hjem</a></li>
+                <li><a href="#products">Produkter</a></li>
+                <li><a href="#about">Om os</a></li>
+                <li><a href="#contact">Kontakt</a></li>
+                <li class="cart-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <h1>GoodRepsDK CPH!</h1>
+        <p>Få Dine Gode Fa*kes I Dag!</p>
+        <div>
+            <a href="#products" class="btn">Shop Nu</a>
+            <a href="https://discord.gg/mCkYHsMMhp" target="_blank" class="btn btn-outline">Tilmeld Discorden</a>
+        </div>
+    </section>
+
+    <section id="products">
+        <h2 class="section-title">Vores Kollektion</h2>
+        <div class="categories">
+            <button class="category-btn active" data-category="all">Alle</button>
+            <button class="category-btn" data-category="bags">Tasker</button>
+            <button class="category-btn" data-category="clothing">Tøj</button>
+            <button class="category-btn" data-category="shoes">Sko</button>
+            <button class="category-btn" data-category="accessories">Tilbehør</button>
+        </div>
+
+        <div class="products-grid" id="products-container">
+            <!-- Products will be loaded here by JavaScript -->
+        </div>
+    </section>
+
+    <section class="discord-section">
+        <h2>Alle køb foregår via Discord</h2>
+        <p>For at bestille skal du blot joine vores Discord-server og sende os en besked med det produkt, du er interesseret i. Vi guider dig gennem processen.</p>
+        <a href="https://discord.gg/mCkYHsMMhp" target="_blank" class="discord-btn">
+            <i class="fab fa-discord"></i> Join Discord for at bestille
+        </a>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#home">Hjem</a>
+            <a href="#products">Produkter</a>
+            <a href="#about">Om os</a>
+            <a href="#contact">Kontakt</a>
+            <a href="https://discord.gg/mCkYHsMMhp" target="_blank">Discord</a>
+        </div>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+        </div>
+        <p class="copyright">© 2025 GoodRepsDK. Alle rettigheder forbeholdes.</p>
+        <p class="disclaimer">
+           Få Dine Fa*ke Ting I Dag!
+        </p>
+    </footer>
+
+    <!-- Product Modal -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Produktdetaljer</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Product details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="buy-now-btn">Køb Nu På Discorden!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buy Now Modal -->
+    <div class="modal" id="buy-now-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Køb Nu På Discorden!</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body buy-now-modal">
+                <i class="fab fa-discord"></i>
+                <h3>Køb Nu På Discorden!</h3>
+                <p>Du vil blive viderestillet til vores Discord-server, hvor du kan sende os en besked for at fuldføre din ordre.</p>
+                <p>Husk at nævne hvilket produkt du er interesseret i!</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="confirm-discord-redirect">Fortsæt til Discord</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample product data (can be replaced with your actual products)
+        const products = [
+            {
+                id: 1,
+                title: "L*V Trio Taske",
+                price: 629.93, // 89.99 USD -> DKK
+                category: "bags",
+                image: "https://i.ebayimg.com/images/g/428AAOSwpbFlE5xT/s-l1200.jpg",
+                description: "Trio Taske (Kvalitet: God)",
+                badge: "BESTSELLER Kvalitet: [Meget God]"
+            },
+            {
+                id: 2,
+                title: "Ra*ph Fl*u*n Glossy Jacket Puffer",
+                price: 622.93, // 88.99 USD -> DKK
+                category: "clothing",
+                image: "https://lh4.googleusercontent.com/IlAS-6Fwi27NcVeNyghLaWxq8mduyrBqZSKhQZI7C2k0IWgh1cc7dePmTs1MP_cIg2t0q7vPwQk2xOjRPxNrBIC2iRuI8-hlFHY5K15E75KasaGHZF9oq4j1vRAKQ0hbGA=w1280",
+                description: "Kvalitet: God",
+                badge: "Kvalitet: [Meget God]"
+            },
+            {
+                id: 3,
+                title: "Mo*cler Patched Ribbed Sweatshirt",
+                price: 209.93, // 29.99 USD -> DKK
+                category: "clothing",
+                image: "https://lh4.googleusercontent.com/VQxdlet1ZS7yFqW1mJ5KxttwsEh6-w7ZDPEEhRFQcdf7zVD4EaEZgeuTtD1rioh-z3Pfo1CMOnrqEjfXFkXiE_zFx6erqbbzPi2cmaU9Oazk9SA2OSM1VdOKvEt82yLq=w1280",
+                description: "Mon*ler Trøje Kvalitet: God",
+                badge: "Kvalitet: [Meget God]"
+            },
+            {
+                id: 4,
+                title: "Mo*cler Branded Hoodie",
+                price: 314.93, // 44.99 USD -> DKK
+                category: "clothing",
+                image: "https://lh6.googleusercontent.com/EOryUxQ0fecpfSFQ2oICZpwvEf6oc3UjGUDywzUS76nFcFn7srGK5IUaN8VlHslh0Iv9kv9nTxvWc6MqhF2xtGpgxi2Co91unmKqq1QxHsCGXZi_SSk9U95iMS5YkuICyQ=w1280",
+                description: "Mo*cler Branded Hoodie Kvalitet: God",
+                badge: "Kvalitet: [Meget God]"
+            },
+            {
+                id: 5,
+                title: "Men's Sling Tasker",
+                price: 559.93, // 79.99 USD -> DKK
+                category: "bags",
+                image: "https://au.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-avenue-slingbag-nm--M46327_PM2_Front%20view.jpg",
+                description: "Kvalitet: [Meget God]"
+            },
+            {
+                id: 6,
+                title: "District PM L*V",
+                price: 349.93, // 49.99 USD -> DKK
+                category: "bags",
+                image: "https://me.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-district-pm--M46255_PM2_Front%20view.jpg",
+                description: "Kvalitet: Meget God"
+            },
+            {
+                id: 7,
+                title: "Black Original GG GC Gu**i Kasket",
+                price: 69.93, // 9.99 USD -> DKK
+                category: "accessories",
+                image: "https://media.gucci.com/style/DarkGray_Center_0_0_490x490/1519416008/200035_KQWBG_1060_001_100_0000_Light.jpg",
+                description: "Læderagtig tegnebog replika til uddannelsesformål for at studere tilbehørdesign og mønstre."
+            },
+            {
+                id: 8,
+                title: "Mo*cler Hera Patch Sweatshirt",
+                price: 209.93, // 29.99 USD -> DKK
+                category: "clothing",
+                image: "https://lh6.googleusercontent.com/pO3rd6ISF7KqKhgDOamewoPZ-szGoRYyF8VkU8tobfWA7kRo5AnB7twtMPaGmn_MI8G6LqSXLxbvOeTbzlCjpWmW4bWkGz3dIf3jdvw_WRHKNLNl9W37k6KiF0Aff-OxPQ=w1280",
+                description: "Mo*cler Hera Patch Sweatshirt Kvalitet: God",
+                badge: "Kvalitet: [Meget God]"
+            },
+            {
+                id: 9,
+                title: "Blended Checker Overshirt Bur*e*y",
+                price: 678.93, // 96.99 USD -> DKK
+                category: "clothing",
+                image: "https://lh6.googleusercontent.com/Dzz-xeYgxpKbAIqubNCWnQXpdhUVB-uN-Jqtbz2Guptu8mXfPgsyDgLkyuOaWkdZSH59LYcXPVDEb-lfOcsvoIM=w1280",
+                description: "Blended Checker Overshirt Bur*e*y Kvalitet: God",
+                badge: "Kvalitet: [Meget God]"
+            },
+            {
+                id: 10,
+                title: "G*cci Crossbody [GOD BUDGET]",
+                price: 678.93, // 96.99 USD -> DKK
+                category: "bags",
+                image: "https://media.gucci.com/style/DarkGray_Center_0_0_800x800/1715004913/792082_FADJA_1042_001_083_0000_Light-GG-Black-small-messenger-bag.jpg",
+                description: "G*cci Crossbody Kvalitet: [GOD BUDGET]",
+                badge: "Kvalitet: [GOD BUDGET]"
+            },
+            {
+                id: 11,
+                title: "Mo*cler RCW Short Sleeve",
+                price: 188.93, // 26.99 USD -> DKK
+                category: "clothing",
+                image: "https://lh4.googleusercontent.com/rNnNCp8P6AB7ql4TP2mMl3QNzToESXFfyRztlr1YIz1UesFMifs5nUC-1LXbzbi3QS7-cz0Ml-QG0eIQXmVHu1hFF8sgYsvf5nV-P55pgqb029uNUk6ZA7riSwRfw-I8zA=w1280",
+                description: "",
+                badge: "Kvalitet: [GOD]"
+            }
+        ];
+
+        // DOM elements
+        const productsContainer = document.getElementById('products-container');
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const productModal = document.getElementById('product-modal');
+        const buyNowModal = document.getElementById('buy-now-modal');
+        const modalBody = document.getElementById('modal-body');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        const buyNowBtn = document.getElementById('buy-now-btn');
+        const confirmDiscordBtn = document.getElementById('confirm-discord-redirect');
+        const cartCount = document.querySelector('.cart-count');
+
+        // Cart functionality
+        let cart = [];
+
+        // Display products
+        function displayProducts(category = 'all') {
+            productsContainer.innerHTML = '';
+            
+            const filteredProducts = category === 'all' 
+                ? products 
+                : products.filter(product => product.category === category);
+            
+            filteredProducts.forEach((product, index) => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card fade-in';
+                productCard.style.animationDelay = `${index * 0.1}s`;
+                
+                let badgeHtml = '';
+                if (product.badge) {
+                    badgeHtml = `<span class="product-badge">${product.badge}</span>`;
+                }
+                
+                productCard.innerHTML = `
+                    ${badgeHtml}
+                    <img src="${product.image}" alt="${product.title}" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">${product.title}</h3>
+                        <p class="product-price">${product.price.toFixed(2)} kr.</p>
+                        <div class="product-actions">
+                            <button class="product-btn" data-id="${product.id}">Køb Nu På Discorden!</button>
+                            <button class="product-btn secondary view-details" data-id="${product.id}">Detaljer</button>
+                        </div>
+                    </div>
+                `;
+                
+                productsContainer.appendChild(productCard);
+            });
+            
+            // Add event listeners to new buttons
+            document.querySelectorAll('.product-btn:not(.view-details)').forEach(btn => {
+                btn.addEventListener('click', showBuyNowModal);
+            });
+            
+            document.querySelectorAll('.view-details').forEach(btn => {
+                btn.addEventListener('click', showProductDetails);
+            });
+        }
+
+        // Add to cart function
+        function addToCart(e) {
+            const productId = parseInt(e.target.getAttribute('data-id'));
+            const product = products.find(p => p.id === productId);
+            
+            cart.push(product);
+            updateCartCount();
+            
+            // Show feedback
+            e.target.textContent = 'Tilføjet!';
+            setTimeout(() => {
+                e.target.textContent = 'Køb Nu På Discorden!';
+            }, 1000);
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            cartCount.textContent = cart.length;
+        }
+
+        // Show product details
+        function showProductDetails(e) {
+            const productId = parseInt(e.target.getAttribute('data-id'));
+            const product = products.find(p => p.id === productId);
+            
+            modalBody.innerHTML = `
+                <div style="display: flex; margin-bottom: 1.5rem;">
+                    <img src="${product.image}" alt="${product.title}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px; margin-right: 1.5rem;">
+                    <div>
+                        <h3 style="margin-bottom: 0.5rem;">${product.title}</h3>
+                        <p style="color: var(--accent); font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem;">${product.price.toFixed(2)} kr.</p>
+                        <p style="margin-bottom: 1rem; color: var(--text-secondary);">Kategori: ${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</p>
+                        ${product.badge ? `<span style="display: inline-block; background-color: var(--accent); color: white; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem;">${product.badge}</span>` : ''}
+                    </div>
+                </div>
+                <p>${product.description}</p>
+            `;
+            
+            buyNowBtn.setAttribute('data-id', product.id);
+            productModal.classList.add('active');
+        }
+
+        // Show buy now modal
+        function showBuyNowModal(e) {
+            const productId = parseInt(e.target.getAttribute('data-id'));
+            const product = products.find(p => p.id === productId);
+            
+            // Store product ID in confirm button
+            confirmDiscordBtn.setAttribute('data-id', productId);
+            buyNowModal.classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            productModal.classList.remove('active');
+            buyNowModal.classList.remove('active');
+        }
+
+        // Redirect to Discord
+        function redirectToDiscord() {
+            window.location.href = `https://discord.gg/mCkYHsMMhp`;
+        }
+
+        // Event listeners
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                displayProducts(btn.getAttribute('data-category'));
+            });
+        });
+
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', closeModal);
+        });
+
+        buyNowBtn.addEventListener('click', () => {
+            productModal.classList.remove('active');
+            showBuyNowModal({ target: buyNowBtn });
+        });
+
+        confirmDiscordBtn.addEventListener('click', redirectToDiscord);
+
+        // Close modal when clicking outside
+        productModal.addEventListener('click', (e) => {
+            if (e.target === productModal) {
+                closeModal();
+            }
+        });
+
+        buyNowModal.addEventListener('click', (e) => {
+            if (e.target === buyNowModal) {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        displayProducts();
+    </script>
+</body>
+</html>
