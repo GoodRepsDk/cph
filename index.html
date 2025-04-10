@@ -189,6 +189,8 @@
             overflow: hidden;
             transition: transform 0.3s;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
         
         .product-card:hover {
@@ -205,16 +207,32 @@
             border-radius: 5px;
             font-size: 0.8rem;
             font-weight: 600;
+            z-index: 1;
+        }
+        
+        .product-img-container {
+            width: 100%;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: #f5f5f5;
         }
         
         .product-img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
         }
         
         .product-info {
             padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         .product-title {
@@ -232,6 +250,7 @@
         .product-actions {
             display: flex;
             justify-content: space-between;
+            margin-top: auto;
         }
         
         .product-btn {
@@ -414,6 +433,13 @@
             margin-bottom: 1.5rem;
         }
         
+        .modal-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
         .modal-footer {
             display: flex;
             justify-content: flex-end;
@@ -452,6 +478,41 @@
             
             .products-grid {
                 grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                padding: 0 1rem;
+            }
+            
+            .product-img-container {
+                height: 250px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+            
+            .product-btn {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+                width: 100%;
+            }
+            
+            .product-btn:last-child {
+                margin-bottom: 0;
+            }
+            
+            .modal-body > div {
+                flex-direction: column;
+            }
+            
+            .modal-body img {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 1rem;
             }
         }
         
@@ -707,7 +768,9 @@
                 
                 productCard.innerHTML = `
                     ${badgeHtml}
-                    <img src="${product.image}" alt="${product.title}" class="product-img">
+                    <div class="product-img-container">
+                        <img src="${product.image}" alt="${product.title}" class="product-img">
+                    </div>
                     <div class="product-info">
                         <h3 class="product-title">${product.title}</h3>
                         <p class="product-price">${product.price.toFixed(2)} kr.</p>
@@ -757,9 +820,9 @@
             const product = products.find(p => p.id === productId);
             
             modalBody.innerHTML = `
-                <div style="display: flex; margin-bottom: 1.5rem;">
-                    <img src="${product.image}" alt="${product.title}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px; margin-right: 1.5rem;">
-                    <div>
+                <div style="display: flex; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                    <img src="${product.image}" alt="${product.title}" style="max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem;">
+                    <div style="flex: 1; min-width: 200px; padding-left: 1.5rem;">
                         <h3 style="margin-bottom: 0.5rem;">${product.title}</h3>
                         <p style="color: var(--accent); font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem;">${product.price.toFixed(2)} kr.</p>
                         <p style="margin-bottom: 1rem; color: var(--text-secondary);">Kategori: ${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</p>
